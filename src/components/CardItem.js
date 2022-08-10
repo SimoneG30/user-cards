@@ -1,8 +1,9 @@
 import '../styles/CardItem.css';
-import {Button,  makeStyles} from "@material-ui/core";
+import {Button, Link, makeStyles} from "@material-ui/core";
 import {useState} from "react";
-import profile from "../images/profile2.png";
-import mockData from "../components/MockData.json";
+import profile from "../images/profile.jpg";
+import {GradientCircularProgress} from "react-circular-gradient-progress";
+import UserCardPlaceholder from "./UserCardPlaceholder";
 
 const useStyles = makeStyles({
     button: {
@@ -10,12 +11,12 @@ const useStyles = makeStyles({
         borderColor: '#835bf9',
         color: '#835bf9',
         height: '45px',
-        marginTop: '-250px',
-        marginLeft: '275px',
+        marginTop: '-240px',
+        marginLeft: '290px',
         width: '45px !important',
         minWidth: 'unset !important',
-        top:'1px',
-        radius:'8px',
+        top: '1px',
+        radius: '8px',
         fontWeight: '800',
         fontSize: '120%',
         '&:hover': {
@@ -30,8 +31,8 @@ const useStyles = makeStyles({
         borderColor: '#66BB6A',
         color: '#66BB6A',
         height: '45px',
-        marginTop: '-250px',
-        marginLeft: '275px',
+        marginTop: '-240px',
+        marginLeft: '290px',
         width: '45px !important',
         minWidth: 'unset !important',
         top: '1px',
@@ -46,29 +47,34 @@ const useStyles = makeStyles({
         },
     },
 })
-const CardItem = ({ userData }) => {
+const CardItem = ({userData}) => {
     const [isActive, setActive] = useState(false);
-
+    const [isCardLoaded, setIsCardLoaded] = useState(false);
     const toggleClass = () => {
         setActive(!isActive);
     };
-const classes = useStyles();
+    const classes = useStyles({userData});
     return (
-        <div className="card">
-            {/*<div className="card__title">*/}
-
-            {/*</div>*/}
-            <div className="card__body">
-
-                <div className="card__image"><img src={profile} alt={''} />
-                    <p className="name">{mockData.first_name}{mockData.last_name} </p>
-                    <br/>
-                    <p className="conn">{mockData.last}</p>
-                    <br/>
-                    <p className="share">Sta già condividendo {mockData.shared_service}</p>
-                    <Button variant="outlined" onClick={toggleClass}  className={!isActive ? classes.button: classes.buttonSuccess}>{!isActive ? '+': '✓'}</Button>
+        <div>
+            {!isCardLoaded && <UserCardPlaceholder/>}
+            <div className="card">
+                <div className="card__body" onLoad={() => setTimeout(() => setIsCardLoaded(true))}>
+                    <div className="card__image"><img src={profile} alt={''}/>
+                        <p className="trustValue">{userData.trust}</p>
+                        <GradientCircularProgress className="progressBar"
+                                                  size={90} strokeWidth={4}
+                                                  endColor={'#fa5d75'} middleColor={'#b860b6'} startColor={'#7864f6'}
+                                                  progress={userData.trust} emptyColor={'#FFFFF'}
+                        />
+                        <p className="name">{userData.first_name} {userData.last_name} </p>
+                        <br/>
+                        <p className="conn">nessuna connessione</p>
+                        <br/>
+                        <p className="share">Sta già condividendo <Link>{userData.shared_service}</Link></p>
+                        <Button variant="outlined" onClick={toggleClass}
+                                className={!isActive ? classes.button : classes.buttonSuccess}>{!isActive ? '+' : '✓'}</Button>
+                    </div>
                 </div>
-
             </div>
         </div>
     )
