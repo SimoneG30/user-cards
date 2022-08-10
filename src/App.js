@@ -3,7 +3,6 @@ import FadeIn from "react-fade-in";
 import CardItem from "./components/CardItem";
 import UserCardPlaceholder from "./components/UserCardPlaceholder";
 import "./App.css";
-import mockData from "./components/MockData.json";
 export default function App() {
 
     const [isLoading, setLoading] = useState(true);
@@ -13,15 +12,13 @@ export default function App() {
         (async () => {
             let userData;
             try {
-                const response = await fetch("https://randomuser.me/api/?results=10");
+                const response = await fetch("https://my.api.mockaroo.com/users.json?key=aa675110");
                 userData = await response.json();
             } catch (error) {
                 console.log(error);
                 userData = [];
             }
-
-            // setUsers(userData.results);
-             setUsers(mockData);
+            setUsers(userData);
             console.log(users)
             setLoading(false);
         })();
