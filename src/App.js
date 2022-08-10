@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import FadeIn from "react-fade-in";
 import CardItem from "./components/CardItem";
 import UserCardPlaceholder from "./components/UserCardPlaceholder";
 import "./App.css";
+
 export default function App() {
 
     const [isLoading, setLoading] = useState(true);
@@ -19,30 +20,31 @@ export default function App() {
                 userData = [];
             }
             setUsers(userData);
-            console.log(users)
-            setLoading(false);
+            console.log(userData)
         })();
+        setTimeout(function () {
+            setLoading(false);
+        }, 2000);
     }, []);
 
     return (
         <div className="App">
             <h1>User Cards</h1>
-            {isLoading && (
+            {isLoading ?
                 <FadeIn>
                     {users?.map(user => (
-                        <div key={`user--${user.id}` }>
+                        <div key={`user--${user.id}`}>
                             <UserCardPlaceholder/>
                         </div>
                     ))}
                 </FadeIn>
-            )}
-            {!isLoading && (
-            <div className="cards-container">
-                {users.map((user, index) => (
-                    <CardItem key={index} userData={user} />
-                ))}
-            </div>
-                )}
+                :
+                <div className="cards-container">
+                    {users.map((user, index) => (
+                        <CardItem key={index} userData={user}/>
+                    ))}
+                </div>
+            }
         </div>
     );
 }
